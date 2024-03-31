@@ -1,0 +1,22 @@
+{
+  "name": "@rdev06/bunt",
+  "module": "index.ts",
+  "scripts": {
+    "postinstall": "bun run build.ts && rm -r src"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "type": "module",
+  "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "class-validator-jsonschema": "^5.0.0",
+    "mongodb": "^6.5.0",
+    "reflect-metadata": "^0.2.2",
+    "typedi": "^0.10.0"
+  }
+}
