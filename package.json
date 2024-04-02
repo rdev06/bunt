@@ -3,8 +3,7 @@
   "module": "src/index.ts",
   "main": "index.js",
   "scripts": {
-    "build":"tsc && bun run build.ts",
-    "postinstall": "rm -r src"
+    "build":"tsc && bun run build.ts"
   },
   "dependencies": {
     "class-transformer": "^0.5.1",

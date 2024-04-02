@@ -1,4 +1,5 @@
 import { MongoClient, ServerApiVersion, Db, Collection, type Document } from 'mongodb';
+import { Container } from 'typedi';
 
 const collMap: Record<string, Collection<Document>> = {};
 export let client: MongoClient | null = null,
@@ -30,6 +31,7 @@ export async function Model<T extends Document = Document>(name: string, validat
   if (!collMap[name]) {
     collMap[name] = await db.createCollection(name, { validator });
   }
+  Container.set(name, collMap[name]);
   return collMap[name] as unknown as Collection<T>;
 }
 
