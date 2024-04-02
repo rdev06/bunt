@@ -2,7 +2,7 @@ async function getExternalsFromPackageJson(): Promise<string[]> {
   const file = Bun.file('./package.json');
   const packageJson = await file.json();
 
-  const sections = ['dependencies', 'devDependencies', 'peerDependencies'],
+  const sections = ['devDependencies'],
     externals: Set<string> = new Set();
 
   for (const section of sections) if (packageJson[section]) Object.keys(packageJson[section]).forEach((_) => externals.add(_));

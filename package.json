@@ -4,13 +4,10 @@
   "main": "index.js",
   "scripts": {
     "build":"tsc && bun run build.ts",
-    "postinstall": "rm -r src && tsconfig.json"
+    "postinstall": "rm -r src"
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "typescript": "^5.0.0"
-  },
-  "peerDependencies": {
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "class-validator-jsonschema": "^5.0.0",
