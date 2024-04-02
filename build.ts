@@ -11,7 +11,7 @@ async function getExternalsFromPackageJson(): Promise<string[]> {
 
 await Bun.build({
   entrypoints: ['src/index.ts', 'src/common.ts', 'src/decorators.ts', 'src/useDb.ts', 'src/SchemaTypeGenerator.ts', 'src/mappedTypes.ts'],
-  outdir: 'dist',
+  outdir: './',
   target: 'bun',
   format: 'esm',
   external: await getExternalsFromPackageJson(),
