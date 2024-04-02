@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build":"tsc && bun run build.ts",
-    "postinstall": "bun run build && rm -r src & rm tsconfig.json"
+    "postinstall": "bun run build && rm -r src"
   },
   "devDependencies": {
     "@types/bun": "latest"
