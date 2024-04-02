@@ -1,8 +1,9 @@
 {
   "name": "@rdev06/bunt",
-  "module": "index.ts",
+  "module": "dist/index.js",
   "scripts": {
-    "postinstall": "bun run build.ts && rm -r src"
+    "build":"tsc && bun run build.ts",
+    "postinstall": "bun run build && rm -r src"
   },
   "devDependencies": {
     "@types/bun": "latest"

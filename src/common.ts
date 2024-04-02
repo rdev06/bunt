@@ -1,4 +1,3 @@
-export * from './mappedTypes';
 export const GeneralResponse = {
   title: 'This is general Response Schema',
   bsonType: 'object',
