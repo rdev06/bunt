@@ -12,7 +12,7 @@ const _CORS_HEADERS = {
 };
 
 interface IBuntOption {
-  routes: Record<string, Function>;
+  routes: Record<string, Record<string, Function>>;
   port?: number;
   CORS_HEADERS?: Record<string, string>;
 }
