@@ -1,5 +1,5 @@
 // @bun
-import{b as j} from"./common.js";import"./useDb.js";import"./chunk-dca050bf006c970a.js";function q(b){let w="";if(b.bsonType==="object")for(let u in b.properties){if(u==="_id")continue;let $=v[b.properties[u].bsonType];if($==="object")$=q(b.properties[u]);w+=` ${u}${!b.required.includes(u)?"?":""} : ${$}, \n`}return"{ \n"+w+"}"}function z(b,w){const d=`
+import{b as j} from"./common.js";function q(b){let w="";if(b.bsonType==="object")for(let u in b.properties){if(u==="_id")continue;let $=v[b.properties[u].bsonType];if($==="object")$=q(b.properties[u]);w+=` ${u}${!b.required.includes(u)?"?":""} : ${$}, \n`}return"{ \n"+w+"}"}function z(b,w){const d=`
 //***** This is auto generated types ***//
 import { ObjectId } from 'mongodb';
 

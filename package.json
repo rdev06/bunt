@@ -11,7 +11,7 @@
     "./SchemaTypeGenerator":"./dist/SchemaTypeGenerator.js"
   },
   "scripts": {
-    "build":"tsc && bun run build.ts",
+    "build":"rm -rf dist && tsc && bun run build.ts",
     "postinstall": "rm -rf src tsconfig.json"
   },
   "dependencies": {

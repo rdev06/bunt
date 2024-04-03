@@ -33,4 +33,6 @@ export async function Model<T extends Document = Document>(name: string, validat
 }
 
 
-
+export function registerModels(models:{name:string, validator: object}[]): void{
+  models.forEach(e => Model(e.name, e.validator));
+}

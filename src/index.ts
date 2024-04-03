@@ -27,22 +27,17 @@ export default function bunt(option: IBuntOption) {
         return new Response('Departed', { headers: CORS_HEADERS });
       }
       const url = new URL(req.url);
+      if(req.method === 'PATCH'){
+        const inputName = url.pathname.slice(1);
+        if(!inputName && !schemas[inputName]) throw {status: 404, message: `No input schema found with input name '${inputName}'`};
+        return Response.json(schemas[inputName])
+      }
       const Module = option.routes[url.pathname];
       if (!Module) {
         throw { status: 404, message: `Can not found path ${url.pathname}` };
       }
       if (req.method === 'GET') {
-        const toSend = {};
-        for (const E in Module) {
-          toSend[E] = Modules[Module[E].name];
-          for (const q in toSend[E]) {
-            for (const m in toSend[E][q]) {
-              toSend[E][q][m].input = toSend[E][q][m].input.map((name: string) => ({ name, ...schemas[name] }));
-            }
-          }
-        }
-
-        return Response.json(toSend);
+        return Response.json(Modules);
       }
       if (!req.body || req.method !== 'POST') throw new Error('Invalid Request, either use client lib or follow Bunt way!');
       const body: any = await req.json();

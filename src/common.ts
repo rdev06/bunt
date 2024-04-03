@@ -1,5 +1,3 @@
-import { Model } from './useDb';
-
 export const GeneralResponse = {
   title: 'This is general Response Schema',
   bsonType: 'object',
@@ -41,12 +39,6 @@ export class HttpException extends Error {
 export class NotFoundException extends HttpException {
   constructor(message: string){
     super(message, 404);
-  }
-}
-
-export function registerModels(models:{name:string, validator: object}[]){
-  for (const e of models) {
-    Model(e.name, e.validator)
   }
 }
 
