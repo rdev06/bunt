@@ -1,0 +1,3 @@
+// @bun
+import{c as q} from"./useDb.js";import"./chunk-dca050bf006c970a.js";function B(j){return function(r){const k=Object.getOwnPropertyNames(r.prototype);for(let p of k){if(p==="constructor")continue;const v=r.prototype[p];r.prototype[p]=async function(...w){return await j.call(this),v.apply(this,w)}}}}function C(j){for(let r of j)q(r.name,r.validator)}var A={title:"This is general Response Schema",bsonType:"object",required:["message"],properties:{message:{bsonType:"string"},refId:{bsontype:"string"}}};class u extends Error{status;meta;constructor(j,r,k){super(j);this.status=r,this.meta=k}}class y extends u{constructor(j){super(j,404)}}export{C as registerModels,B as UseGuard,y as NotFoundException,u as HttpException,A as GeneralResponse};
+export{A as b};

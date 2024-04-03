@@ -30,7 +30,7 @@
     // build
     "declaration": true,
     "emitDeclarationOnly": true,
-    "outDir": "./"
+    "outDir": "dist"
   },
   "include": [
     "src/**/*.ts"

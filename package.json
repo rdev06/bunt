@@ -1,9 +1,18 @@
 {
   "name": "@rdev06/bunt",
   "module": "src/index.ts",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "exports": {
+    ".":"./dist/index.js",
+    "./useDb":"./dist/useDb.js",
+    "./common":"./dist/common.js",
+    "./decorators":"./dist/decorators.js",
+    "./mappedTypes":"./dist/mappedTypes.js",
+    "./SchemaTypeGenerator":"./dist/SchemaTypeGenerator.js"
+  },
   "scripts": {
-    "build":"tsc && bun run build.ts"
+    "build":"tsc && bun run build.ts",
+    "postinstall": "rm -rf src tsconfig.json"
   },
   "dependencies": {
     "class-transformer": "^0.5.1",
@@ -18,3 +27,4 @@
   },
   "type": "module"
 }
+

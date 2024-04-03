@@ -1,0 +1,3 @@
+// @bun
+import"./chunk-dca050bf006c970a.js";import{MongoClient as w,ServerApiVersion as y} from"mongodb";import{Container as z} from"typedi";async function G(x=process.env.MONGO_URI||"mongodb://localhost:27017",k=process.env.MONGO_DB||"bunt"){j=new w(x,{serverApi:{version:y.v1,strict:!0}}),await j.connect(),console.log("db connected"),h=j.db(k);const u=await h.listCollections({type:"collection"},{nameOnly:!0}).toArray();for(let q of u)f[q.name]=h.collection(q.name);return j}async function H(x,k){if(!h)throw new Error("Either client not connected or Database not found");if(!f[x])f[x]=await h.createCollection(x,{validator:k});return z.set(x,f[x]),f[x]}var f={},j=null,h=null;export{h as db,G as connect,j as client,H as Model};
+export{H as c};

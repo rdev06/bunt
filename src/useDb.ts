@@ -17,11 +17,8 @@ export async function connect(uri = process.env.MONGO_URI || 'mongodb://localhos
   // client.topology.isConnected();
   db = client.db(dbName);
   const collections = await db.listCollections({type: 'collection'}, { nameOnly: true }).toArray();
-  // console.dir(collections);
   for (const col of collections) {
-    // if (col.type === 'collection') {
       collMap[col.name] = db.collection(col.name);
-    // }
   }
   return client;
 }

@@ -21,6 +21,10 @@ export declare class HttpException extends Error {
 export declare class NotFoundException extends HttpException {
     constructor(message: string);
 }
+export declare function registerModels(models: {
+    name: string;
+    validator: object;
+}[]): void;
 export type Ctx = {
     headers: Request['headers'];
     _headers: Record<string, string>;
