@@ -7,7 +7,7 @@ export const GeneralResponse = {
       bsonType: 'string'
     },
     refId: {
-      bsontype: 'string'
+      bsonType: 'string'
     }
   }
 };
