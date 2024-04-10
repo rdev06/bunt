@@ -12,7 +12,8 @@
   },
   "scripts": {
     "build":"rm -rf dist && tsc && bun run build.ts",
-    "postinstall": "rm -rf src tsconfig.json"
+    "postinstall": "rm -rf src tsconfig.json",
+    "postbuild": "cp -rf dist ../ughar/node_modules/@rdev06/bunt"
   },
   "dependencies": {
     "class-transformer": "^0.5.1",

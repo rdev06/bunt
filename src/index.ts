@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import Container from 'typedi';
 import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
 import { Modules } from './decorators';
-import type { Ctx } from './common';
+import { Ctx, outputSchema } from './common';
 
 const _CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -17,6 +17,12 @@ interface IBuntOption {
   CORS_HEADERS?: Record<string, string>;
 }
 
+interface IBody {
+  e: string,
+  m: string,
+  args: any[]
+}
+
 export default function bunt(option: IBuntOption) {
   const CORS_HEADERS = option.CORS_HEADERS || _CORS_HEADERS;
   const schemas = validationMetadatasToSchemas();
@@ -26,12 +32,19 @@ export default function bunt(option: IBuntOption) {
       if (req.method === 'OPTIONS') {
         return new Response('Departed', { headers: CORS_HEADERS });
       }
-      const url = new URL(req.url);
-      if(req.method === 'PATCH'){
-        const inputName = url.pathname.slice(1);
-        if(!inputName && !schemas[inputName]) throw {status: 404, message: `No input schema found with input name '${inputName}'`};
-        return Response.json(schemas[inputName])
+      if (req.method === 'PATCH') {
+        const body: any = await req.json();
+        if (!body.n) throw { status: 400, message: `Name is required is field name 'n'` };
+        switch (body.t) {
+          case 'i':
+            return Response.json(schemas[body.n]);
+          case 'o':
+            return Response.json(outputSchema[body.n]);
+          default:
+            throw { status: 400, message: 'Unsupported type' };
+        }
       }
+      const url = new URL(req.url);
       const Module = option.routes[url.pathname];
       if (!Module) {
         throw { status: 404, message: `Can not found path ${url.pathname}` };
@@ -40,28 +53,29 @@ export default function bunt(option: IBuntOption) {
         return Response.json(Modules);
       }
       if (!req.body || req.method !== 'POST') throw new Error('Invalid Request, either use client lib or follow Bunt way!');
-      const body: any = await req.json();
+      const body: IBody = await req.json() as IBody;
       const Controller = Module[body.e];
       if (!Controller) {
         throw { status: 404, message: body.e + ' controller not found' };
       }
 
-      const Entity: { ctx: Ctx } = Container.get(Controller);
+      const ctx = {
+        headers: req.headers,
+        _headers: {},
+        status: 200,
+        set: function(headers) {
+          this._headers = headers;
+        }
+      };
+      Container.set(Ctx, ctx);
+      const Entity = Container.get(Controller);
       const handler = Entity?.[body.m];
       if (!handler) {
         throw { status: 404, message: `Can not found handler under ${body.e}/${body.m}` };
       }
-      Entity.ctx = {
-        headers: req.headers,
-        _headers: {},
-        status: 200,
-        set: function (headers: Record<string, string>) {
-          this._headers = headers;
-        }
-      };
-      const res = await handler.apply(Entity, body.args);
-      const headersToSend = { ...CORS_HEADERS, ...Entity.ctx._headers };
-      const status = Entity.ctx.status || 200;
+      const res = await handler.apply(Entity, body.args || []);
+      const headersToSend = { ...CORS_HEADERS, ...ctx._headers };
+      const status = ctx.status || 200;
       if (typeof res === 'string') {
         return Response.json({ message: res }, { status, headers: headersToSend });
       }

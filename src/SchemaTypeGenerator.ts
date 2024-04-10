@@ -1,43 +1,53 @@
-import { GeneralResponse } from './common';
+import  { type IToGenerate, GeneralResponse } from './common';
 
 const TypeBsonMap = {
+  objectId: 'ObjectId',
   string: 'string',
   bool: 'boolean',
-  objectId: 'string',
   int: 'number',
+  long: 'number',
+  decimal: 'number',
+  number: 'number',
   double: 'number'
 };
+const space = '  ';
+const tab = (ind: number): string => Array(ind).fill(space).join('');
 
-export function Generate(schema: any) {
+export function Generate(schema: any, idx=0) {
+  const ind = tab(idx);
+  const isFound = TypeBsonMap[schema.bsonType];
+  if(isFound) return isFound;
   let Gen = '';
   if (schema.bsonType === 'object') {
     for (const key in schema.properties) {
       if (key === '_id') continue;
-      // @ts-ignore
-      let type = TypeBsonMap[schema.properties[key].bsonType];
-      if (type === 'object') {
-        type = Generate(schema.properties[key]);
+      const bsonType = schema.properties[key].bsonType;
+      let type;
+      if (bsonType === 'object') {
+        type = Generate(schema.properties[key], idx+1);
+      }else if(bsonType === 'array'){
+        type = Generate(schema.properties[key].items, idx+1) + '[]';
+      }else{
+        type = TypeBsonMap[bsonType];
+        if(type === TypeBsonMap['string'] && schema.properties[key].enum){
+          type = schema.properties[key].enum.map(e => `'${e}'`).join(' | ');
+        }
       }
-
-      Gen += ` ${key}${!schema.required.includes(key) ? '?' : ''} : ${type}, \n`;
+      Gen += `${space + ind + key}${!schema.required.includes(key) ? '?' : ''}: ${type};\n`;
+    }
+    if(!schema.hasOwnProperty('additionalProperties') || schema.additionalProperties){
+      Gen += space + ind + '[K: string]: any;\n';
     }
   }
-  return '{ \n' + Gen + '}';
+  return '{\n' + Gen + ind + '}';
 }
 
-type IBsonType = 'object' | 'array' | 'string' | 'number' | 'boolean' | string;
-
-type IToGenerate = { name: string; schema: { bsonType: IBsonType; [k: string]: any } };
 
 export function SchemaTypeGenerator(toGenerate: IToGenerate[], fileLocation?: string): string | Promise<number> {
-  // @ts-ignore
-  const schemas: IToGenerate[] = [{ name: 'GeneralResponse', schema: GeneralResponse }].concat(toGenerate);
-
+  const schemas: IToGenerate[] = [GeneralResponse, ...toGenerate];
   const Types = schemas.map((e: IToGenerate) => `export interface I${e.name} ${Generate(e.schema)}`);
-
-  const toWrite = `
-//***** This is auto generated types ***//
-import { ObjectId } from 'mongodb';
+  const toWrite = `//***** This is auto generated types ***//
+import type { ObjectId } from 'mongodb';
 
 ${Types.join('\n')}
 // *** Please do not touch unless you know what you are doing ***//
